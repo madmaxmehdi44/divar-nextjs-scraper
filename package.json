@@ -8,16 +8,16 @@
     "start": "next start",
     "scraper": "tsx scripts/run-scraper.ts"
   },
-  "dependencies": {
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest",
-    "playwright": "latest"
+   "dependencies": {
+    "next": "16.3.2",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "playwright": "1.62.1"
   },
   "devDependencies": {
-    "typescript": "latest",
-    "tsx": "latest",
-    "@types/node": "latest",
-    "@types/react": "latest"
+    "typescript": "7.0.2",
+    "tsx": "4.23.12",
+    "@types/node": "26.3.0",
+    "@types/react": "19.2.18"
   }
 }
