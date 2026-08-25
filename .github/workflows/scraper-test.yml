@@ -1,5 +1,7 @@
 name: Divar Scraper Test
 
+# Trigger verification run after workflow compatibility fixes
+
 on:
   workflow_dispatch:
   push:
