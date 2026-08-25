@@ -1,4 +1,5 @@
 import { scrapeDivar } from "../lib/divar";
+import { isTargetPrice, parsePrice } from "../lib/parser";
 import { mkdir, writeFile } from "node:fs/promises";
 
 async function main() {
@@ -6,14 +7,22 @@ async function main() {
 
   const ads = await scrapeDivar();
 
+  const parsedAds = ads.map((ad) => ({
+    ...ad,
+    price: parsePrice(ad.description || ad.title),
+  }));
+
+  const filteredAds = parsedAds.filter((ad) => isTargetPrice(ad.price));
+
   await mkdir("output", { recursive: true });
 
   const output = {
     success: true,
     source: "https://divar.ir/s/shiraz",
-    count: ads.length,
+    total: parsedAds.length,
+    matchedPriceRange: filteredAds.length,
     generatedAt: new Date().toISOString(),
-    ads,
+    ads: filteredAds,
   };
 
   await writeFile(
@@ -22,7 +31,7 @@ async function main() {
     "utf-8"
   );
 
-  console.log(`Scraped ${ads.length} ads`);
+  console.log(`Matched ${filteredAds.length} ads`);
 }
 
 main().catch((error) => {
