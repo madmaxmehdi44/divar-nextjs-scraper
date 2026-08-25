@@ -18,10 +18,9 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: 22
-          cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
@@ -30,7 +29,9 @@ jobs:
         run: npm run scraper
 
       - name: Upload scraper output
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: divar-scraper-output
           path: output/
+          if-no-files-found: ignore
