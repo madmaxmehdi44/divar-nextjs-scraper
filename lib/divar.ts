@@ -1,5 +1,7 @@
 import { chromium } from "playwright";
 
+const DIVAR_URL = "https://divar.ir/s/shiraz";
+
 export async function scrapeDivar() {
   const browser = await chromium.launch({
     headless: true,
@@ -7,10 +9,14 @@ export async function scrapeDivar() {
 
   const page = await browser.newPage({
     locale: "fa-IR",
+    viewport: {
+      width: 1280,
+      height: 1200,
+    },
   });
 
-  await page.goto("https://divar.ir/s/shiraz/buy-residential", {
-    waitUntil: "networkidle",
+  await page.goto(DIVAR_URL, {
+    waitUntil: "domcontentloaded",
     timeout: 60000,
   });
 
@@ -19,11 +25,11 @@ export async function scrapeDivar() {
   const ads = await page.evaluate(() => {
     return Array.from(document.querySelectorAll("a"))
       .map((item) => ({
-        title: item.textContent?.trim(),
+        title: item.textContent?.trim() || "",
         url: (item as HTMLAnchorElement).href,
       }))
-      .filter((item) => item.title && item.url.includes("/v/"))
-      .slice(0, 20);
+      .filter((item) => item.url.includes("/v/"))
+      .slice(0, 50);
   });
 
   await browser.close();
